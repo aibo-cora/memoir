@@ -40,6 +40,15 @@
                                     <action selector="signOutButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="OMC-lR-rXz"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aA2-yU-NSl">
+                                <rect key="frame" x="129" y="643" width="159" height="42"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                <state key="normal" title="Create memoir"/>
+                                <connections>
+                                    <action selector="createMemoirButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="XYd-Pc-7kM"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
@@ -50,7 +59,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="137.68115942028987" y="92.410714285714278"/>
+            <point key="canvasLocation" x="136" y="-158"/>
         </scene>
     </scenes>
 </document>
