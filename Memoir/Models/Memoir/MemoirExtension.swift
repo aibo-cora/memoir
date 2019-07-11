@@ -32,7 +32,7 @@ extension ViewController: AssetsPickerViewControllerDelegate {
         }
         
         print("Number of photos selected: \(assets.count)")
-        let chosenPhotos: [UIImage] = convertAssets(assets: assets)
+        var chosenPhotos: [UIImage] = convertAssets(assets: assets)
 //        testConvertedImages(images: chosenPhotos)
         
         guard let videoWriter = try? AVAssetWriter(outputURL: filePath, fileType: AVFileType.mp4) else {
@@ -59,58 +59,74 @@ extension ViewController: AssetsPickerViewControllerDelegate {
             videoWriter.add(videoWriterInput)
         }
         
-//        if videoWriter.startWriting() {
-//            videoWriter.startSession(atSourceTime: CMTime.zero)
-//            assert(pixelBufferAdaptor.pixelBufferPool != nil)
-//            let media_queue = DispatchQueue(label: "mediaInputQueue")
-//            videoWriterInput.requestMediaDataWhenReady(on: media_queue, using: { () -> Void in
-//                let fps: Int32 = 1
-//                let framePerSecond: Int64 = 5
+        if videoWriter.startWriting() {
+            videoWriter.startSession(atSourceTime: CMTime.zero)
+            
+            assert(pixelBufferAdaptor.pixelBufferPool != nil)
+            let media_queue = DispatchQueue(label: "mediaInputQueue")
+            videoWriterInput.requestMediaDataWhenReady(on: media_queue, using: { () -> Void in
+                let fps: Int32 = 1
+                let framePerSecond: Int64 = 5
 //                let frameDuration = CMTimeMake(value: framePerSecond, timescale: fps)
-//                var frameCount: Int64 = 0
-//                var appendSucceeded = true
-//                while (!self.choosenPhotos.isEmpty) { //choosenPhotos is image array
-//                    if (videoWriterInput.isReadyForMoreMediaData) {
-//                        let nextPhoto = self.choosenPhotos.remove(at: 0)
-//                        let lastFrameTime = CMTimeMake(frameCount * framePerSecond, fps)
+                var frameCount: Int64 = 0
+                var appendSucceeded = true
+                while (!chosenPhotos.isEmpty) { //choosenPhotos is image array
+                    if (videoWriterInput.isReadyForMoreMediaData) {
+                        let nextPhoto = chosenPhotos.remove(at: 0)
+//                        let lastFrameTime = CMTimeMake(value: frameCount * framePerSecond, timescale: fps)
 //                        let presentationTime = frameCount == 0 ? lastFrameTime : CMTimeAdd(lastFrameTime, frameDuration)
-//                        print("presentationTime-------------\(presentationTime)")
-//                        var pixelBuffer: CVPixelBuffer? = nil
-//                        let status: CVReturn = CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, pixelBufferAdaptor.pixelBufferPool!, &pixelBuffer)
-//                        if let pixelBuffer = pixelBuffer, status == 0 {
-//                            let managedPixelBuffer = pixelBuffer
-//                            CVPixelBufferLockBaseAddress(managedPixelBuffer, CVPixelBufferLockFlags(rawValue: CVOptionFlags(0)))
-//                            let data = CVPixelBufferGetBaseAddress(managedPixelBuffer)
-//                            let rgbColorSpace = CGColorSpaceCreateDeviceRGB()
-//                            let context = CGContext(data: data, width: Int(self.outputSize.width), height: Int(self.outputSize.height), bitsPerComponent: 8, bytesPerRow: CVPixelBufferGetBytesPerRow(managedPixelBuffer), space: rgbColorSpace, bitmapInfo: CGImageAlphaInfo.premultipliedFirst.rawValue)
-//                            context!.clear(CGRect(x: 0, y: 0, width: CGFloat(self.outputSize.width), height: CGFloat(self.outputSize.height)))
-//                            let horizontalRatio = CGFloat(self.outputSize.width) / nextPhoto.size.width
-//                            let verticalRatio = CGFloat(self.outputSize.height) / nextPhoto.size.height
-//                            //aspectRatio = max(horizontalRatio, verticalRatio) // ScaleAspectFill
-//                            let aspectRatio = min(horizontalRatio, verticalRatio) // ScaleAspectFit
-//                            let newSize: CGSize = CGSize(width: nextPhoto.size.width * aspectRatio, height: nextPhoto.size.height * aspectRatio)
-//                            let x = newSize.width < self.outputSize.width ? (self.outputSize.width - newSize.width) / 2 : 0
-//                            let y = newSize.height < self.outputSize.height ? (self.outputSize.height - newSize.height) / 2 : 0
-//                            context?.draw(nextPhoto.cgImage!, in: CGRect(x: x, y: y, width: newSize.width, height: newSize.height))
-//                            CVPixelBufferUnlockBaseAddress(managedPixelBuffer, CVPixelBufferLockFlags(rawValue: CVOptionFlags(0)))
-//                            appendSucceeded = pixelBufferAdaptor.append(pixelBuffer, withPresentationTime: presentationTime)
-//                        } else {
-//                            print("Failed to allocate pixel buffer")
-//                            appendSucceeded = false
-//                        }
-//                    }
-//                    if !appendSucceeded {
-//                        break
-//                    }
-//                    frameCount += 1
-//                }
-//                videoWriterInput.markAsFinished()
-//                videoWriter.finishWriting { () -> Void in
+                        let presentationTime = CMTimeMake(value: frameCount * framePerSecond,
+                                                          timescale: fps)
+                        frameCount = frameCount + 1
+                        var pixelBuffer: CVPixelBuffer? = nil
+                        let status: CVReturn = CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, pixelBufferAdaptor.pixelBufferPool!,
+                                                                                  &pixelBuffer)
+                        if let pixelBuffer = pixelBuffer, status == 0 {
+                            let managedPixelBuffer = pixelBuffer
+                            CVPixelBufferLockBaseAddress(managedPixelBuffer,
+                                                         CVPixelBufferLockFlags(rawValue: CVOptionFlags(0)))
+                            let data = CVPixelBufferGetBaseAddress(managedPixelBuffer)
+                            let rgbColorSpace = CGColorSpaceCreateDeviceRGB()
+                            let context = CGContext(data: data,
+                                                    width: Int(outputSize.width),
+                                                    height: Int(outputSize.height),
+                                                    bitsPerComponent: 8,
+                                                    bytesPerRow: CVPixelBufferGetBytesPerRow(managedPixelBuffer),
+                                                    space: rgbColorSpace,
+                                                    bitmapInfo: CGImageAlphaInfo.premultipliedFirst.rawValue)
+                            context!.clear(CGRect(x: 0, y: 0, width: CGFloat(outputSize.width),
+                                                  height: CGFloat(outputSize.height)))
+                            let horizontalRatio = CGFloat(outputSize.width) / nextPhoto.size.width
+                            let verticalRatio = CGFloat(outputSize.height) / nextPhoto.size.height
+                            //aspectRatio = max(horizontalRatio, verticalRatio) // ScaleAspectFill
+                            let aspectRatio = min(horizontalRatio, verticalRatio) // ScaleAspectFit
+                            let newSize: CGSize = CGSize(width: nextPhoto.size.width * aspectRatio, height: nextPhoto.size.height * aspectRatio)
+                            let x = newSize.width < outputSize.width ? (outputSize.width - newSize.width) / 2 : 0
+                            let y = newSize.height < outputSize.height ? (outputSize.height - newSize.height) / 2 : 0
+                            context?.draw(nextPhoto.cgImage!,
+                                          in: CGRect(x: x, y: y, width: newSize.width, height: newSize.height))
+                            CVPixelBufferUnlockBaseAddress(managedPixelBuffer,
+                                                           CVPixelBufferLockFlags(rawValue: CVOptionFlags(0)))
+                            appendSucceeded = pixelBufferAdaptor.append(pixelBuffer,
+                                                                        withPresentationTime: presentationTime)
+                        } else {
+                            print("Failed to allocate pixel buffer")
+                            appendSucceeded = false
+                        }
+                    }
+                    if !appendSucceeded {
+                        break
+                    }
+                }
+                videoWriterInput.markAsFinished()
+                videoWriter.finishWriting { () -> Void in
 //                    self.imageArrayToVideoComplete = true
-//                    print("Image array to mutable video complete :)")
-//                }
-//            })
-//        }
+                    print(filePath)
+                    print("Image array to mutable video complete :)")
+                    // maybe save the file to Photo Library?
+                }
+            })
+        }
     }
     
     //MARK: Convert array of PHAssets to UIImage
