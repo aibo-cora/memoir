@@ -9,11 +9,11 @@
 import Foundation
 
 class Memoir {
-    var title: String!
-    var memoirID: String!
+    var title: String
+    let memoirID: UUID
     
     init(title: String) {
         self.title = title
-        self.memoirID = UUID().uuidString
+        self.memoirID = UUID()
     }
 }
