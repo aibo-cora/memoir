@@ -60,6 +60,9 @@
                                 <state key="normal" title="+">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
+                                <connections>
+                                    <segue destination="VQV-aW-WJq" kind="presentation" id="hv5-zc-vf5"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -73,6 +76,14 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2Lk-94-I30" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-2171.0144927536235" y="30.803571428571427"/>
+        </scene>
+        <!--AddMemoirViewController-->
+        <scene sceneID="vVU-gJ-KsG">
+            <objects>
+                <viewControllerPlaceholder storyboardName="AddMemoirViewController" id="VQV-aW-WJq" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="TBl-jQ-YZn" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1277" y="31"/>
         </scene>
     </scenes>
 </document>
