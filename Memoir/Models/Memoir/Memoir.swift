@@ -6,14 +6,16 @@
 //  Copyright © 2019 Symbiosis. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 class Memoir {
+    var image: UIImage?
     var title: String
     let memoirID: UUID
     
-    init(title: String) {
+    init(title: String, image: UIImage? = nil) {
         self.title = title
         self.memoirID = UUID()
+        self.image = image
     }
 }
