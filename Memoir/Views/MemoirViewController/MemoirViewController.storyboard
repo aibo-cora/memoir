@@ -66,7 +66,8 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
-                                    <segue destination="VQV-aW-WJq" kind="presentation" identifier="toAddMemoirSegue" id="hv5-zc-vf5"/>
+                                    <action selector="createMemoirPressed:" destination="v7P-DH-hhv" eventType="touchUpInside" id="DF6-2C-dTE"/>
+                                    <segue destination="LPA-qm-U6G" kind="show" id="bxz-J1-x4h"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -88,7 +89,15 @@
                 <viewControllerPlaceholder storyboardName="AddMemoirViewController" id="VQV-aW-WJq" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TBl-jQ-YZn" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1277" y="31"/>
+            <point key="canvasLocation" x="-1516" y="-106"/>
+        </scene>
+        <!--CreateMemoirViewController-->
+        <scene sceneID="Q5J-uH-lmZ">
+            <objects>
+                <viewControllerPlaceholder storyboardName="CreateMemoirViewController" id="LPA-qm-U6G" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="3OV-1b-CVS" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-965" y="31"/>
         </scene>
     </scenes>
 </document>

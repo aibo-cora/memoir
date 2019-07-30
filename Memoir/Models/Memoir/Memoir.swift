@@ -10,12 +10,15 @@ import UIKit
 
 class Memoir {
     var image: UIImage?
-    var title: String
+    var title: String?
     let memoirID: UUID
+    let timeCreated: Date
+    var slideShowImages: [UIImage]!
     
-    init(title: String, image: UIImage? = nil) {
+    init(title: String? = nil, image: UIImage? = nil) {
         self.title = title
         self.memoirID = UUID()
         self.image = image
+        self.timeCreated = Date()
     }
 }

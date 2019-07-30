@@ -8,7 +8,7 @@
 
 import UIKit
 
-class popUpChoiceButton: UIButton {
+class customCancelSave: UIButton {
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)

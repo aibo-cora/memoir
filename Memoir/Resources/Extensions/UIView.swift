@@ -16,4 +16,11 @@ extension UIView {
         layer.shadowColor = UIColor.darkGray.cgColor
         layer.cornerRadius = 10
     }
+    
+    func addDeeperShadowRoundedCorners() {
+        layer.shadowOpacity = 1
+        layer.shadowOffset = CGSize(width: 10, height: 10)
+        layer.shadowColor = UIColor.darkGray.cgColor
+        layer.cornerRadius = 20
+    }
 }

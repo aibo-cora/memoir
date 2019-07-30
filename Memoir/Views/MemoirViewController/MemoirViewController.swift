@@ -31,7 +31,21 @@ class MemoirViewController: UIViewController {
         plusButton.makeFloatingActionButton()
     }
     
-
+    override func viewWillAppear(_ animated: Bool) {
+        tableView.reloadData()
+    }
+    
+    @IBAction func createMemoirPressed(_ sender: UIButton) {
+        let storyboard = UIStoryboard(name: String(describing: CreateMemoirViewController.self),
+                                      bundle: nil)
+        let createMemoirViewController = storyboard.instantiateInitialViewController()!
+        present(createMemoirViewController,
+                animated: true) {
+                    // code after createMemoir is displayed
+              //      self.tableView.reloadData()
+        }
+    }
+    
     
     // MARK: - Navigation
 
