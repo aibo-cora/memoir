@@ -6,7 +6,7 @@
 //  Copyright © 2019 Symbiosis. All rights reserved.
 //
 
-import Foundation
+import GoogleSignIn
 import UIKit
 
 extension MemoirViewController: UITableViewDataSource,
@@ -60,5 +60,19 @@ extension MemoirViewController: UITableViewDataSource,
         delete.title = "Trash"
         
         return UISwipeActionsConfiguration(actions: [delete])
+    }
+    
+    func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let upload = UIContextualAction(style: .normal,
+                                        title: "Upload")
+        { (action, view, actionPerformed: @escaping (Bool) -> (Void)) in
+                                            actionPerformed(true)
+            GIDSignIn.sharedInstance()?.signIn()
+        }
+        
+        upload.backgroundColor = Theme.upload
+//        upload.image =
+        
+        return UISwipeActionsConfiguration(actions: [upload])
     }
 }

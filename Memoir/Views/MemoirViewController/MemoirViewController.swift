@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import MaterialComponents.MaterialButtons
+import GoogleSignIn
 
 class MemoirViewController: UIViewController {
     @IBOutlet weak var plusButton: UIButton!
@@ -17,6 +17,11 @@ class MemoirViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        GIDSignIn.sharedInstance()?.delegate = self
+        GIDSignIn.sharedInstance()?.uiDelegate = self
+        
+        GIDSignIn.sharedInstance().signInSilently()
+        
         tableView.dataSource = self
         tableView.delegate = self
         // Do any additional setup after loading the view.
@@ -44,6 +49,8 @@ class MemoirViewController: UIViewController {
                     // code after createMemoir is displayed
               //      self.tableView.reloadData()
         }
+        
+        
     }
     
     

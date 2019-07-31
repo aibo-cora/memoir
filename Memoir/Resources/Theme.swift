@@ -14,4 +14,5 @@ class Theme {
     static let accent = UIColor(named: "accent")
     static let background = UIColor(named: "background")
     static let tint = UIColor(named: "tint")
+    static let upload = UIColor(named: "upload")
 }
