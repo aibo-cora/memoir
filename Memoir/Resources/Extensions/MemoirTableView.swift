@@ -68,10 +68,19 @@ extension MemoirViewController: UITableViewDataSource,
         { (action, view, actionPerformed: @escaping (Bool) -> (Void)) in
                                             actionPerformed(true)
             GIDSignIn.sharedInstance()?.signIn()
+            MemoirFunctions.uploadToYouTube(fileToUpload: MemoirData.memoirData[indexPath.row].filePath!,
+                                            callback:
+                { (success) in
+                    if success {
+                        print("Success! Video uploaded to your YouTube channel")
+                    } else {
+                        print("Error: Video upload unsuccessful")
+                    }
+            })
         }
         
-        upload.backgroundColor = Theme.upload
-//        upload.image =
+        upload.backgroundColor = UIColor.clear
+        upload.image = #imageLiteral(resourceName: "youtube.icon")
         
         return UISwipeActionsConfiguration(actions: [upload])
     }

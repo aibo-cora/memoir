@@ -14,6 +14,7 @@ class Memoir {
     let memoirID: UUID
     let timeCreated: Date
     var slideShowImages: [UIImage]!
+    var filePath: URL?
     
     init(title: String? = nil, image: UIImage? = nil) {
         self.title = title
