@@ -8,6 +8,7 @@
 
 import GoogleSignIn
 import UIKit
+import AVKit
 
 extension MemoirViewController: UITableViewDataSource,
                                 UITableViewDelegate
@@ -83,5 +84,22 @@ extension MemoirViewController: UITableViewDataSource,
         upload.image = #imageLiteral(resourceName: "youtube.icon")
         
         return UISwipeActionsConfiguration(actions: [upload])
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let fileToPreview = MemoirData.memoirData[indexPath.row].filePath else {
+            return
+            // if filePath was not set
+        }
+        
+        let player = AVPlayer(url: fileToPreview)
+        let controller = AVPlayerViewController()
+        
+        controller.player = player
+        present(controller,
+                animated: true) {
+                    player.play()
+        }
+        
     }
 }
