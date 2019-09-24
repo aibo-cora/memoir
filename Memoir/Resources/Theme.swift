@@ -16,3 +16,7 @@ class Theme {
     static let tint = UIColor(named: "tint")
     static let upload = UIColor(named: "upload")
 }
+
+/* Bugs: 
+ 6. Some images are upside down or sideways; wrong size (smaller) than original
+ */

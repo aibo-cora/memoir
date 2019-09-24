@@ -35,7 +35,7 @@ class AddMemoirViewController: UIViewController {
         // Use .rightView in case you want to display an image in the textfield
 //        memoirNameTextField.rightViewMode = .never
         
-        guard memoirNameTextField.text != "", let newMemoirName = memoirNameTextField.text else {
+        guard memoirNameTextField.text != "", let _ = memoirNameTextField.text else {
             memoirNameTextField.layer.borderColor = UIColor.red.cgColor
             memoirNameTextField.layer.borderWidth = 1
             memoirNameTextField.layer.cornerRadius = 5
@@ -45,9 +45,7 @@ class AddMemoirViewController: UIViewController {
         }
         dismiss(animated: true) {
             if let done = self.doneSaving {
-                MemoirFunctions.createMemoir(memoir: Memoir(title: newMemoirName,
-                                                            image: self.imageView.image),
-                                     viewController: self)
+//                MemoirFunctions.createMemoir(memoir: Memoir(title: newMemoirName))
                 done()
             }
         }

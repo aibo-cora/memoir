@@ -8,8 +8,9 @@
 
 import UIKit
 import Photos
+import GoogleSignIn
 
-class CreateMemoirViewController: UIViewController {
+class CreateMemoirViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var bottomLayerView: UIView!
     @IBOutlet weak var tableViewContainerView: UIView!    
     @IBOutlet weak var tableView: UITableView!
@@ -18,8 +19,6 @@ class CreateMemoirViewController: UIViewController {
     @IBOutlet weak var saveButton: UIButton!
     
     @IBOutlet weak var memoirTitleTF: UITextField!
-    
-    @IBOutlet weak var memoirTitleDesc: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,12 +42,14 @@ class CreateMemoirViewController: UIViewController {
         tableView.dataSource = self
         tableView.reloadData()
         
-//        memoirTitleDesc.font = UIFont(name: Theme.mainFontName, size: 10)
-//        memoirTitleDesc.textColor = Theme.tint
-//        memoirTitleDesc.text = "Add a short title to your memoir."
-        
-        memoirTitleTF.placeholder = "\"Bahamas\", \"My Story\"..."
-        
+        memoirTitleTF.delegate = self
+        memoirTitleTF.placeholder = "Title"
+        memoirTitleTF.font = UIFont(name: Theme.mainFontName, size: 15)
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        memoirTitleTF.resignFirstResponder()
+        return true
     }
     
 
@@ -69,29 +70,39 @@ class CreateMemoirViewController: UIViewController {
     }
     @IBAction func saveButtonPressed(_ sender: UIButton) {
         // TODO: Value check
-        let newMemoir = Memoir(title: memoirTitleTF.text)
+//        let newMemoir = Memoir(title: memoirTitleTF.text)
+        let newMemoir = Memoir(title: memoirTitleTF.text,
+                               image: nil,
+                               filePathURL: nil,
+                               version: 0,
+                               memoirID: UUID())
         
         newMemoir.slideShowImages = CreateMemoirTableData.tableData
         if let indexPathSelected = tableView.indexPathForSelectedRow {
             newMemoir.image = CreateMemoirTableData.tableData[indexPathSelected.row]
         }
         
-        MemoirData.memoirData.append(newMemoir)
+        MemoirFunctions.createMemoir(memoir: newMemoir)
         dismiss(animated: true) {
+            // TODO: In case there are a lot of images to process, add a routine to build a movie using dispatchqueue
             MemoirFunctions.buildMovie(memoir: newMemoir)
-            
+            MemoirFunctions.saveMemoirsToFile()
         }
         
     }
     
     fileprivate func presentPickerController() {
-        let picker = UIImagePickerController()
+        DispatchQueue.main.async {
+            // all UI updates have to be on main thread!
+            let picker = UIImagePickerController()
+            
+            picker.delegate = self
+            picker.sourceType = .photoLibrary
+            //        picker.mediaTypes = [String(kUTTMediaMovie)]
+            self.present(picker,
+                         animated: true)
+        }
         
-        picker.delegate = self
-        picker.sourceType = .photoLibrary
-//        picker.mediaTypes = [String(kUTTMediaMovie)]
-        self.present(picker,
-                     animated: true)
     }
     
     @IBAction func selectImageButtonPressed(_ sender: UIButton) {
@@ -117,12 +128,11 @@ class CreateMemoirViewController: UIViewController {
                                                   message: "Photo Library access was previously denied. Please updated your Settting to change this",
                                                   preferredStyle: .alert)
                     let goToSettingsAction = UIAlertAction(title: "Go to Settings",
-                                                           style: .default) { (action) in
-                                                            DispatchQueue.main.async {
-                                                                let url = URL(string: UIApplication.openSettingsURLString)!
-                                                                UIApplication.shared.open(url, options: [:])
-                                                            }
-                                                            
+                                                           style: .default)
+                    { (action) in
+                            DispatchQueue.main.async {
+                                            let url = URL(string: UIApplication.openSettingsURLString)!
+                                            UIApplication.shared.open(url, options: [:])}
                     }
                     alert.addAction(goToSettingsAction)
                     alert.addAction(UIAlertAction(title: "Cancel",
@@ -182,6 +192,23 @@ extension CreateMemoirViewController: UITableViewDelegate, UITableViewDataSource
         createMemoirTableCell.setupCell(at: indexPath.row + 1, using: CreateMemoirTableData.tableData[indexPath.row])
         
         return createMemoirTableCell
+    }
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let delete = UIContextualAction(style: .destructive,
+                                        title: "Trash")
+        { (action, view, actionPerformed: @escaping (Bool) -> (Void)) in
+            actionPerformed(true)
+            
+            CreateMemoirTableData.tableData.remove(at: indexPath.row)
+            self.tableView.reloadData()
+            if (CreateMemoirTableData.tableData.count == 0) {
+                self.saveButton.alpha = 0.5
+                self.saveButton.isUserInteractionEnabled = false
+            }
+        }
+        
+        return UISwipeActionsConfiguration(actions: [delete])
     }
     
 }
