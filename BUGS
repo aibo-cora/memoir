@@ -1,0 +1,5 @@
+
+
+- When in sharing mode, adding story to activityItems does not work.
+
+- Search bar: Tags that do not exist result in all assets being shown. Need to change to 0

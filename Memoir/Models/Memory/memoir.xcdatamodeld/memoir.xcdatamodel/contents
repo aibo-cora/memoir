@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17511" systemVersion="19H15" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Memory" representedClassName="Memory" syncable="YES" codeGenerationType="class">
+        <attribute name="attributedStory" optional="YES" attributeType="Transformable" valueTransformerName="" customClassName="NSAttributedString"/>
+        <attribute name="creationDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="info" optional="YES" attributeType="String"/>
+        <attribute name="mediaType" optional="YES" attributeType="String"/>
+        <attribute name="placemark" optional="YES" attributeType="String" customClassName="CLPlacemark"/>
+        <attribute name="rating" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="story" optional="YES" attributeType="String" customClassName="NSAttributedString"/>
+        <attribute name="tags" optional="YES" attributeType="String"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
+        <attribute name="youtubeURL" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" customClassName="URL"/>
+        <relationship name="thumbnail" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Thumbnail" inverseName="memory" inverseEntity="Thumbnail"/>
+        <relationship name="video" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Video" inverseName="memory" inverseEntity="Video"/>
+    </entity>
+    <entity name="Thumbnail" representedClassName="Thumbnail" syncable="YES" codeGenerationType="class">
+        <attribute name="image" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
+        <relationship name="memory" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Memory" inverseName="thumbnail" inverseEntity="Memory"/>
+    </entity>
+    <entity name="Video" representedClassName="Video" syncable="YES" codeGenerationType="class">
+        <attribute name="video" optional="YES" attributeType="Binary"/>
+        <relationship name="memory" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Memory" inverseName="video" inverseEntity="Memory"/>
+    </entity>
+    <elements>
+        <element name="Memory" positionX="-286.42578125" positionY="-109.73828125" width="128" height="223"/>
+        <element name="Thumbnail" positionX="-17.9296875" positionY="55.77734375" width="128" height="73"/>
+        <element name="Video" positionX="-153" positionY="0" width="128" height="73"/>
+    </elements>
+</model>

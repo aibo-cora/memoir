@@ -1,0 +1,9 @@
+- Create a new browsing controller.
+
+- Display asset in creationDate + Rating order.
+- Variable # of cells, depending on screen size.
+- Show hints which gestures are available when swiping through assets. (Disable in "Settings").
+- Have presets:
+    a. Set tags beforehand
+    b. Capture mode
+- Log of activities.

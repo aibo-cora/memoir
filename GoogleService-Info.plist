@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>854642247742-ko39cfc55la7rjh5urfr55sm0i727bqd.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.854642247742-ko39cfc55la7rjh5urfr55sm0i727bqd</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBUhTNZkh7r-hYho-u7jP0TbyDcupNq4K0</string>
+	<key>GCM_SENDER_ID</key>
+	<string>854642247742</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.ghafla.Memoir</string>
+	<key>PROJECT_ID</key>
+	<string>memoir-april-2020</string>
+	<key>STORAGE_BUCKET</key>
+	<string>memoir-april-2020.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:854642247742:ios:b8fe1624e26dc4de87e96f</string>
+	<key>DATABASE_URL</key>
+	<string>https://memoir-april-2020.firebaseio.com</string>
+</dict>
+</plist>
