@@ -24,10 +24,16 @@ class TextBindingManager: ObservableObject {
 }
 
 struct ConfigureUploadUI: View {
+    @Environment(\.presentationMode) var presentation
     @ObservedObject var textBindingManager = TextBindingManager()
     @State private var privacySetting = 0
-    @State private var showUpload = false
     @State private var showWebView = false
+    
+    @State private var description = ""
+    @State private var textStyle = UIFont.TextStyle.body
+    
+    let parentController: VideoAssetViewController
+    let videoAsset: CustomAsset
     
     var body: some View {
         NavigationView {
@@ -45,8 +51,8 @@ struct ConfigureUploadUI: View {
                         WebView(url: "https://support.google.com/youtube/answer/157177")
                     })
                     Picker(selection: $privacySetting, label: Text("Privacy setting")) {
-                        Text("Public").tag(0)
-                        Text("Private").tag(1)
+                        Text("Private").tag(0)
+                        Text("Public").tag(1)
                         Text("Unlisted").tag(2)
                     }
                     .pickerStyle(SegmentedPickerStyle())
@@ -67,24 +73,25 @@ struct ConfigureUploadUI: View {
                     Text("Description:")
                         .padding()
                         .font(.subheadline)
-                    Spacer()
-                    // UITextView
+                    TextView(text: $description, textStyle: $textStyle)
+                        .padding()
                 }
-                Spacer()
             }
             .navigationBarItems(trailing: Button("Upload") {
-                print("Upload button pressed.")
-            }.disabled(!showUpload))
+                let videoMetadata = VideoMetadata(title: textBindingManager.text, description: description, privacySetting: PrivacySetting(rawValue: privacySetting) ?? PrivacySetting.privateSetting)
+                
+                self.parentController.dismiss(animated: true)
+                Utility.uploadVideo(delegate: parentController, asset: videoAsset, metadata: videoMetadata)
+            }.disabled(description.isEmpty || textBindingManager.text.isEmpty))
         }
     }
     
     func didDismiss() {
-        
     }
 }
 
 struct ConfigureUploadUI_Previews: PreviewProvider {
     static var previews: some View {
-        ConfigureUploadUI()
+        ConfigureUploadUI(parentController: VideoAssetViewController(), videoAsset: CustomAsset(memory: Memory()))
     }
 }

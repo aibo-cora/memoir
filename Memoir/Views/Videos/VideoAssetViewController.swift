@@ -12,6 +12,8 @@ import CoreLocation
 import AVKit
 import GoogleSignIn
 
+import SwiftUI
+
 enum AssetExportState {
     case beingExported, ready
 }
@@ -490,7 +492,17 @@ extension VideoAssetViewController: UICollectionViewDelegate {
                 }
                 let upload = UIAction(title: "Upload to YouTube", image: UIImage(named: "youtube.icon"), identifier: nil, discoverabilityTitle: nil) {
                     (action) in
-                    Utility.uploadVideo(delegate: self, asset: selectedAsset)
+                    if let _ = GIDSignIn.sharedInstance()?.currentUser {
+                        let hostingController = UIHostingController(rootView: ConfigureUploadUI(parentController: self, videoAsset: selectedAsset))
+                        
+                        present(hostingController, animated: true)
+                    } else {
+                        // No user is logged in
+                        let alert = UIAlertController(title: "Upload Error", message: "Please log in to your Google account in Settings before attempting to upload.", preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
+                        
+                        present(alert, animated: true, completion: nil)
+                    }
                 }
                 
                 let shareMenu = UIMenu(title: "Share", image: UIImage(systemName: "square.and.arrow.up"), identifier: nil, children: [sendVideo, sendLink, upload])

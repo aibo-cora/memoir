@@ -79,62 +79,55 @@ class Utility {
     }
     
     /// Upload video to YouTube
-    static func uploadVideo(delegate: VideoAssetViewController, asset: CustomAsset) {
+    static func uploadVideo(delegate: VideoAssetViewController, asset: CustomAsset, metadata: VideoMetadata) {
+        
         let success = UIAlertController(title: "Success", message: "The movie was uploaded to your YouTube channel. You can now share the link with others.", preferredStyle: .alert)
         let failure = UIAlertController(title: "Failure", message: "The movie could not be uploaded to your YouTube channel. Please try again later.", preferredStyle: .alert)
         
-        if let _ = GIDSignIn.sharedInstance()?.currentUser {
-            if let videoEntity = asset.memory.video {
-                if let videoData =  videoEntity.video {
-                    do {
-                        let settings = RenderSettings()
-                        
-                        if FileManager.default.fileExists(atPath: settings.outputURL.path) {
-                            try FileManager.default.removeItem(at: settings.outputURL)
-                        }
-                        try videoData.write(to: settings.outputURL)
-                        
-                        delegate.uploadToYouTube(filePath: settings.outputURL, videoStory: asset.memory.story)
-                        { (isUploaded, link) in
-                            if isUploaded {
-                                delegate.present(success, animated: true) {
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-                                        delegate.dismiss(animated: true, completion: nil)
-                                    }
-                                }
-                                asset.memory.youtubeURL = link
-                                Utility.saveContext(message: "Memory uploaded to YouTube and updated in Core Data.")
-                            } else {
-                                delegate.present(failure, animated: true) {
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-                                        delegate.dismiss(animated: true, completion: nil)
-                                    }
-                                }
-                                asset.memory.youtubeURL = nil
-                                Utility.saveContext(message: "Memory failed to upload to YouTube and updated in Core Data.")
-                            }
-                            DispatchQueue.main.async {
-                                delegate.snapshotForCurrentState()
-                            }
-                            
-                            do {
-                                if FileManager.default.fileExists(atPath: settings.outputURL.path) {
-                                    try FileManager.default.removeItem(at: settings.outputURL)
-                                }
-                            } catch {
-                                print("Error: Failed to remove file that was uploaded to YouTube")
-                            }
-                        }
-                    } catch {
-                        print("Error: Failed to write file to disk to be uploaded to YouTube")
+        if let videoEntity = asset.memory.video {
+            if let videoData =  videoEntity.video {
+                do {
+                    let settings = RenderSettings()
+                    
+                    if FileManager.default.fileExists(atPath: settings.outputURL.path) {
+                        try FileManager.default.removeItem(at: settings.outputURL)
                     }
+                    try videoData.write(to: settings.outputURL)
+                    
+                    delegate.uploadToYouTube(filePath: settings.outputURL, metadata: metadata) { (isUploaded, link) in
+                        if isUploaded {
+                            delegate.present(success, animated: true) {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                                    delegate.dismiss(animated: true, completion: nil)
+                                }
+                            }
+                            asset.memory.youtubeURL = link
+                            Utility.saveContext(message: "Memory uploaded to YouTube and updated in Core Data.")
+                        } else {
+                            delegate.present(failure, animated: true) {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                                    delegate.dismiss(animated: true, completion: nil)
+                                }
+                            }
+                            asset.memory.youtubeURL = nil
+                            Utility.saveContext(message: "Memory failed to upload to YouTube and updated in Core Data.")
+                        }
+                        DispatchQueue.main.async {
+                            delegate.snapshotForCurrentState()
+                        }
+                        
+                        do {
+                            if FileManager.default.fileExists(atPath: settings.outputURL.path) {
+                                try FileManager.default.removeItem(at: settings.outputURL)
+                            }
+                        } catch {
+                            print("Error: Failed to remove file that was uploaded to YouTube")
+                        }
+                    }
+                } catch {
+                    print("Error: Failed to write file to disk to be uploaded to YouTube")
                 }
             }
-        } else {
-            // No user is logged in
-            let alert = UIAlertController(title: "Upload Error", message: "Please log in to your Google account in Settings before attempting to upload.", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
-            delegate.present(alert, animated: true, completion: nil)
         }
     }
     
