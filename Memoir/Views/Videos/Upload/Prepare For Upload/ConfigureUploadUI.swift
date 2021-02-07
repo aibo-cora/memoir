@@ -24,7 +24,7 @@ class TextBindingManager: ObservableObject {
 }
 
 struct ConfigureUploadUI: View {
-    @Environment(\.presentationMode) var presentation
+    
     @ObservedObject var textBindingManager = TextBindingManager()
     @State private var privacySetting = 0
     @State private var showWebView = false

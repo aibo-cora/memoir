@@ -67,16 +67,22 @@ extension VideoAssetViewController {
             to: "https://www.googleapis.com/upload/youtube/v3/videos?part=snippet,status",
             method: .post,
             headers: headers).responseJSON(completionHandler: { (response) in
+                if let error = response.error {
+                    print("Failure, error: \(error.localizedDescription)")
+                    callback(false, nil)
+                }
                 switch response.result {
                 case let .success(value):
-                    print("Success!")
-                    let videoJSON = JSON(value) // convert Any to JSON
-                    print(value)
+                    let videoJSON = JSON(value); print(value)
                     let videoID = videoJSON["id"].stringValue
                     
-                    if let videoURL =  self.retreiveVideoURL(videoID: videoID) {
-                        print("Uploaded to YouTube @ \(videoURL)")
-                        callback(true, videoURL)
+                    if let _ = videoJSON["error"].dictionary {
+                        callback(false, nil)
+                    } else {
+                        if let videoURL =  self.retreiveVideoURL(videoID: videoID) {
+                            print("Uploaded to YouTube @ \(videoURL)")
+                            callback(true, videoURL)
+                        }
                     }
                 case .failure (let error):
                     print("Upload error: \(error.localizedDescription)")

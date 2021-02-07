@@ -110,7 +110,7 @@ class Utility {
                                 }
                             }
                             asset.memory.youtubeURL = nil
-                            Utility.saveContext(message: "Memory failed to upload to YouTube and updated in Core Data.")
+                            Utility.saveContext(message: "Memory failed to upload to YouTube.")
                         }
                         DispatchQueue.main.async {
                             delegate.snapshotForCurrentState()
