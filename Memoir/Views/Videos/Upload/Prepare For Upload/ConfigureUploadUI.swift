@@ -38,9 +38,6 @@ struct ConfigureUploadUI: View {
     var body: some View {
         NavigationView {
             VStack {
-                Text("      You are about to upload a video to YouTube, please provide a title, description and privacy setting.")
-                    .font(.subheadline)
-                    .padding()
                 VStack {
                     Button(action: {
                         showWebView.toggle()
@@ -61,28 +58,32 @@ struct ConfigureUploadUI: View {
                 
                 HStack {
                     Text("Title:")
-                        .padding()
                         .font(.subheadline)
                     Spacer()
-                    
                     TextField("You won't believe what I just saw...", text: $textBindingManager.text)
-                        .padding()
                 }
+                .padding()
                 
-                HStack {
+                VStack(alignment: .leading)  {
                     Text("Description:")
-                        .padding()
                         .font(.subheadline)
                     TextView(text: $description, textStyle: $textStyle)
-                        .padding()
+                }
+                .padding()
+                .onAppear {
+                    if let story = videoAsset.memory.story {
+                        description = "\t" + story
+                    } else { description = "" }
                 }
             }
             .navigationBarItems(trailing: Button("Upload") {
                 let videoMetadata = VideoMetadata(title: textBindingManager.text, description: description, privacySetting: PrivacySetting(rawValue: privacySetting) ?? PrivacySetting.privateSetting)
                 
                 self.parentController.dismiss(animated: true)
+                
                 Utility.uploadVideo(delegate: parentController, asset: videoAsset, metadata: videoMetadata)
-            }.disabled(description.isEmpty || textBindingManager.text.isEmpty))
+            }
+            .disabled(description.isEmpty || textBindingManager.text.isEmpty))
         }
     }
     

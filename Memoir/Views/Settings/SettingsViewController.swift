@@ -13,6 +13,10 @@ class SettingsViewController: UIViewController, GIDSignInDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     
+    let googleSectionMembers = ["Manage security settings",
+                                "Google Privacy Policy",
+                                "YouTube Terms of Service"]
+    
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!,
                  withError error: Error!) {
         
