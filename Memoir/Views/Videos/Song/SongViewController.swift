@@ -237,13 +237,13 @@ class SongViewController: UIViewController {
         
         assetExport.exportAsynchronously { () -> Void in
             switch assetExport.status {
-            case AVAssetExportSessionStatus.completed:
+            case AVAssetExportSession.Status.completed:
                 print("Successfully saved file with new recording")
                 completion(nil, newFileWithRecording)
-            case AVAssetExportSessionStatus.failed:
+            case AVAssetExportSession.Status.failed:
                 print("Export session failed \(assetExport.error?.localizedDescription ?? "error nil")")
                 completion(assetExport.error, nil)
-            case AVAssetExportSessionStatus.cancelled:
+            case AVAssetExportSession.Status.cancelled:
                 print("Export session cancelled \(assetExport.error?.localizedDescription ?? "error nil")")
                 completion(assetExport.error, nil)
             default:
