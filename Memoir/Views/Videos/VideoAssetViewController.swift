@@ -310,23 +310,32 @@ extension VideoAssetViewController {
         var snapshot = Snapshot()
         
         snapshot.appendSections([Section.media])
+        
         if searchAssets.count > 0 {
             snapshot.appendItems(searchAssets, toSection: Section.media)
         } else {
             snapshot.appendItems(assets, toSection: Section.media)
         }
         
-        if let datasource = dataSource {
-            datasource.apply(snapshot, animatingDifferences: true) { [unowned self ] in
-                datasource.apply(snapshot, animatingDifferences: true)
-                
-                scrollToItem()
+        if let dataSource = dataSource {
+            dataSource.apply(snapshot, animatingDifferences: true) { [weak self] in
+                self?.scrollToItem()
             }
         }
     }
     
     func scrollToItem() {
-        assetsCollectionView.scrollToItem(at: IndexPath(row: assets.count / 2, section: 0), at: .centeredHorizontally, animated: true)
+        let itemsCount = assetsCollectionView.numberOfItems(inSection: 0)
+        guard itemsCount > 0 else { return }
+        
+        let targetRow = min(assets.count / 2, itemsCount - 1)
+        let indexPath = IndexPath(row: targetRow, section: 0)
+        
+        assetsCollectionView.scrollToItem(
+            at: indexPath,
+            at: .centeredHorizontally,
+            animated: true
+        )
     }
 }
 

@@ -19,12 +19,15 @@ end
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     target.build_configurations.each do |config|
+      # Set deployment target consistently
       config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
+      
+      # Disable Bitcode (recommended for most modern pods)
       config.build_settings['ENABLE_BITCODE'] = 'NO'
 
-      if config.build_settings['SDKROOT'] == 'iphonesimulator'
-        config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'
-      end
+      # Fix for GoogleSignIn and other pods: Exclude arm64 for simulator
+      # This prevents the "built for iOS, but linking for iOS-simulator" error
+      config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'
     end
   end
 end
